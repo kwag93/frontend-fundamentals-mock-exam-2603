@@ -139,15 +139,27 @@ describe('예약하기 심화', () => {
 
     await screen.findByText('예약 가능 회의실');
 
-    const roomButtons = screen.getAllByRole('button', { pressed: false }).filter(
-      el => el.getAttribute('aria-label') && !['확정', '예약하기', '취소', 'TV', '화이트보드', '화상장비', '스피커', '뒤로가기'].includes(el.getAttribute('aria-label')!)
-    );
+    const roomButtons = screen
+      .getAllByRole('button', { pressed: false })
+      .filter(
+        el =>
+          el.getAttribute('aria-label') &&
+          !['확정', '예약하기', '취소', 'TV', '화이트보드', '화상장비', '스피커', '뒤로가기'].includes(
+            el.getAttribute('aria-label')!
+          )
+      );
     const roomNames = roomButtons.map(el => el.getAttribute('aria-label'));
 
     const floorOrder = roomNames.map(name => {
-      if (name?.includes('토스홀') || name?.includes('301')) return 3;
-      if (name?.includes('501') || name?.includes('502')) return 5;
-      if (name?.includes('대회의실') || name?.includes('701') || name?.includes('702')) return 7;
+      if (name?.includes('토스홀') || name?.includes('301')) {
+        return 3;
+      }
+      if (name?.includes('501') || name?.includes('502')) {
+        return 5;
+      }
+      if (name?.includes('대회의실') || name?.includes('701') || name?.includes('702')) {
+        return 7;
+      }
       return 0;
     });
 

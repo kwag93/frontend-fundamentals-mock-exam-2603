@@ -118,6 +118,7 @@ module.exports = {
     'react/jsx-no-target-blank': 'error',
 
     '@typescript-eslint/no-var-requires': 'warn',
+    'react/no-unknown-property': ['error', { ignore: ['css'] }],
     'react/react-in-jsx-scope': 'off',
   },
 };
