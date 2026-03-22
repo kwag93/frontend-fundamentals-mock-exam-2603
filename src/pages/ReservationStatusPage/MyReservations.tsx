@@ -1,17 +1,22 @@
 import { css } from '@emotion/react';
 import { Button, Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { cancelReservation } from 'pages/remotes';
 import { EQUIPMENT_LABELS } from './constant';
-import { roomsQuery, myReservationsQuery, queryKeys } from './queries';
+import {  myReservationsQueryOptions, queryKeys, roomsQueryOptions } from './queries';
 import type { Message } from './useMessage';
 
 type SetMessage = (message: Message | null) => void;
 
 export const MyReservations = ({ setMessage }: { setMessage: SetMessage }) => {
-  const { data: rooms = [] } = useQuery(roomsQuery);
-  const { data: myReservationList = [] } = useQuery(myReservationsQuery);
+const [{data: rooms = []}, {data: myReservationList = []}] = useQueries({
+	queries: [
+		roomsQueryOptions(),
+		myReservationsQueryOptions(),
+	]
+})
+
   const getRoomName = (roomId: string) =>
     rooms.find((r: { id: string; name: string }) => r.id === roomId)?.name ?? roomId;
 

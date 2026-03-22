@@ -8,12 +8,12 @@ import { Timeline } from './Timeline';
 import { MyReservations } from './MyReservations';
 import { MessageBenner } from './MessageBenner';
 import { useMessage } from './useMessage';
-import { myReservationsQuery } from './queries';
+import {  myReservationsQueryOptions } from './queries';
 
 export function ReservationStatusPage() {
   const navigate = useNavigate();
   const [message, setMessage] = useMessage();
-  const { data: myReservationList = [] } = useQuery(myReservationsQuery);
+  const { data: myReservationList = [] } = useQuery(myReservationsQueryOptions());
 
   return (
     <div

@@ -4,7 +4,7 @@ import { colors } from '_tosslib/constants/colors';
 import { useQuery } from '@tanstack/react-query';
 import { ALL_EQUIPMENT, EQUIPMENT_LABELS, TIME_SLOTS, formatDate } from 'pages/constants';
 import { useBookingSearchParams } from './useBookingSearchParams';
-import { roomsQuery } from './queries';
+import { roomsQueryOptions } from './queries';
 
 interface FilterPanelProps {
   onFilterChange: () => void;
@@ -14,7 +14,7 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
   const [{ date, startTime, endTime, attendees, equipment, preferredFloor }, setFilter] =
     useBookingSearchParams();
 
-  const { data: rooms = [] } = useQuery(roomsQuery);
+  const { data: rooms = [] } = useQuery(roomsQueryOptions());
   const floors = [...new Set(rooms.map((r: { floor: number }) => r.floor))].sort((a: number, b: number) => a - b);
 
   return (

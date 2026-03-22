@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { EQUIPMENT_LABELS } from 'pages/constants';
 import { BookingFilter } from './useBookingSearchParams';
-import { roomsQuery, reservationsQuery } from './queries';
+import { roomsQueryOptions, reservationsQueryOptions } from './queries';
 import { filterAvailableRooms, isFilterComplete } from './filterAvailableRooms';
 
 interface Room {
@@ -22,9 +22,12 @@ interface AvailableRoomListProps {
 }
 
 export function AvailableRoomList({ filter, selectedRoomId, onSelect }: AvailableRoomListProps) {
-  const { data: rooms = [] } = useQuery(roomsQuery);
-  const { data: reservations = [] } = useQuery(reservationsQuery(filter.date));
-
+	const [{data: rooms = []}, {data: reservations = []}] = useQueries({
+		queries: [
+			roomsQueryOptions(),
+			reservationsQueryOptions(filter.date),
+		]
+	})
   const availableRooms = isFilterComplete(filter) ? filterAvailableRooms(rooms, reservations, filter) : [];
 
   if (!isFilterComplete) {

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { FilterPanel } from './FilterPanel';
@@ -9,7 +9,7 @@ import { AvailableRoomList } from './AvailableRoomList';
 import { BookButton } from './BookButton';
 import { useBookingSearchParams } from './useBookingSearchParams';
 import { getFilterValidationError, isFilterComplete, filterAvailableRooms } from './filterAvailableRooms';
-import { roomsQuery, reservationsQuery } from './queries';
+import { reservationsQueryOptions, roomsQueryOptions } from './queries';
 
 export function RoomBookingPage() {
   const navigate = useNavigate();
@@ -17,8 +17,12 @@ export function RoomBookingPage() {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const { data: rooms = [] } = useQuery(roomsQuery);
-  const { data: reservations = [] } = useQuery(reservationsQuery(filter.date));
+	const [{data: rooms = []}, {data: reservations = []}] = useQueries({
+		queries: [
+			roomsQueryOptions(),
+			reservationsQueryOptions(filter.date),
+		]
+	})
 
   const validationError = getFilterValidationError(filter);
   const availableRooms = isFilterComplete(filter) ? filterAvailableRooms(rooms, reservations, filter) : [];

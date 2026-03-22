@@ -1,16 +1,20 @@
 import { Text } from '_tosslib/components';
 import { css } from '@emotion/react';
 import { colors } from '_tosslib/constants/colors';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { HOUR_LABELS, TOTAL_MINUTES, EQUIPMENT_LABELS, TIMELINE_START } from './constant';
 import { useDateParam } from './useDateParam';
-import { reservationsQuery, roomsQuery } from './queries';
+import { reservationsQueryOptions, roomsQueryOptions } from './queries';
 
 export const Timeline = () => {
-  const [date] = useDateParam();
-  const { data: reservations = [] } = useQuery(reservationsQuery(date));
-  const { data: rooms = [] } = useQuery(roomsQuery);
+	const [date] = useDateParam();
+	const [{data: reservations = []}, {data: rooms = []}] = useQueries({
+		queries: [
+			reservationsQueryOptions(date),
+			roomsQueryOptions(),
+		]
+	})
   const [activeReservation, setActiveReservation] = useState<string | null>(null);
 
   return (
